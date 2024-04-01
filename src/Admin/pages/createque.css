@@ -1,0 +1,98 @@
+/* createque.css */
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-y: auto; /* Enable vertical scrolling */
+  height: calc(100vh - 40px); /* Adjust height to fit viewport */
+}
+
+.input {
+  margin-bottom: 15px;
+}
+
+.option-input {
+  margin-bottom: 10px;
+}
+
+.question-list {
+  margin-top: 20px;
+}
+
+.question-item {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.option-input input {
+  margin-right: 10px;
+}
+
+.btn-group {
+  margin-top: 10px;
+}
+
+.btn-group button {
+  margin-right: 10px;
+}
+
+/* Styling specific elements */
+h1 {
+  text-align: center;
+}
+
+label {
+  font-weight: bold;
+}
+
+.auto-height-input {
+  min-height: 100px; /* Adjust as needed */
+}
+
+.option-input .option-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.option-input .option-buttons button {
+  margin-left: 10px;
+}
+
+.option-input .option-buttons button:last-child {
+  margin-left: 0;
+}
+
+/* Adjust spacing and alignment for buttons */
+.btn-group button {
+  margin-right: 10px;
+}
+
+.btn-group button:last-child {
+  margin-right: 0;
+}
+
+/* Additional styling for select elements */
+.select-container {
+  display: flex;
+  align-items: center;
+}
+
+.select-container select {
+  margin-left: 10px;
+  padding: 5px;
+}
+
+/* Styling for question items */
+.question-item p {
+  margin: 0;
+}
+
+/* Add hover effect for question items */
+.question-item:hover {
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+}
