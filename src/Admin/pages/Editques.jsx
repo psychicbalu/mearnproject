@@ -1,43 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MDBBtn, MDBInput, MDBTextArea } from 'mdb-react-ui-kit';
+import { fetchQuestion, updateQuestion } from '../../Services/Allapi'; // Assuming fetchQuestions retrieves all questions
 
-function Editques({ questions }) {
+function Editques({ questions, setQuestions }) {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [editQuestion, setEditQuestion] = useState('');
   const [answerType, setAnswerType] = useState('text');
   const [answerOptions, setAnswerOptions] = useState(['']);
   const [editAnswer, setEditAnswer] = useState('');
 
-  const handleSelectQuestion = (index) => {
-    setSelectedQuestion(index);
-    setEditQuestion(questions[index].question);
-    setAnswerType(questions[index].answerType);
-    if (questions[index].answerType === 'checkbox') {
-      setAnswerOptions(questions[index].answerOptions);
-    } else {
-      setAnswerOptions(['']);
+  useEffect(() => {
+    if (selectedQuestion !== null) {
+      const question = questions.find(q => q.number === selectedQuestion);
+      setEditQuestion(question.question);
+      setAnswerType(question.answerType);
+      setAnswerOptions(question.answerOptions || ['']);
+      setEditAnswer(question.answer);
     }
-    setEditAnswer(questions[index].answer);
+  }, [selectedQuestion, questions]);
+
+  const handleSelectQuestion = (number) => {
+    setSelectedQuestion(number);
   };
 
   const handleSaveEdit = () => {
     if (selectedQuestion !== null && editQuestion.trim() !== '') {
-      const updatedQuestions = [...questions];
-      updatedQuestions[selectedQuestion] = {
-        ...updatedQuestions[selectedQuestion],
-        question: editQuestion,
-        answerType,
-        answerOptions: answerType === 'checkbox' ? answerOptions.filter(opt => opt.trim() !== '') : [],
-        answer: editAnswer,
-      };
-      // Update the questions state if needed
-      // setQuestions(updatedQuestions);
-      // localStorage.setItem('questions', JSON.stringify(updatedQuestions));
-      setSelectedQuestion(null);
-      setEditQuestion('');
-      setAnswerType('text');
-      setAnswerOptions(['']);
-      setEditAnswer('');
+      const updatedQuestionIndex = questions.findIndex(q => q.number === selectedQuestion);
+      if (updatedQuestionIndex !== -1) {
+        const updatedQuestion = {
+          ...questions[updatedQuestionIndex],
+          question: editQuestion,
+          answerType,
+          answerOptions: answerType === 'checkbox' ? answerOptions.filter(opt => opt.trim() !== '') : [],
+          answer: editAnswer,
+        };
+  
+        updateQuestion(updatedQuestion)
+          .then(() => {
+            // Assuming the backend returns the updated question object,
+            // you can update the questions state with it
+            const updatedQuestions = [...questions];
+            updatedQuestions[updatedQuestionIndex] = updatedQuestion;
+            setQuestions(updatedQuestions);
+            setSelectedQuestion(null);
+            setEditQuestion('');
+            setAnswerType('text');
+            setAnswerOptions(['']);
+            setEditAnswer('');
+          })
+          .catch(error => console.error('Error updating question:', error));
+      }
     }
   };
 
@@ -62,7 +74,7 @@ function Editques({ questions }) {
       <h1>Edit Question</h1>
       <div className="question-list">
         {questions.map((q, index) => (
-          <div key={index} className={`question-item ${selectedQuestion === index ? 'selected' : ''}`} onClick={() => handleSelectQuestion(index)}>
+          <div key={index} className={`question-item ${selectedQuestion === q.number ? 'selected' : ''}`} onClick={() => handleSelectQuestion(q.number)}>
             <p>Question {q.number}: {q.question}</p>
             <p>Answer: {q.answer}</p>
           </div>

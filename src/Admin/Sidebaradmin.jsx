@@ -17,7 +17,7 @@ function Sidebaradmin() {
     GetQuestions().then((res) => {
       setMode('edit');
       setQuestions(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     });
   }
 
@@ -26,7 +26,7 @@ function Sidebaradmin() {
     if (mode === 'create') {
       return <Createque />;
     } else if (mode === 'edit') {
-      return <Editques questions={questions}  />;
+      return <Editques questions={questions} setQuestions={setQuestions}  />;
     }
     return null;
   };
